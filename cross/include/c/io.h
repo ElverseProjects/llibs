@@ -5,7 +5,7 @@
  * @file     io.h
  * @brief    Project L - Ellipse, cross-platform framework. Input/Output header.
  * @version  V0.3.0
- * @date     30. Sep 2024
+ * @date     24. Oct 2024
  * @author   Matvey Rybalkin
 ******************************************************************************/
 
@@ -18,14 +18,18 @@
 
 
 typedef struct {
-    void (write)(void*);
-    void (read)(void*);
+    void(*write)(void*);
+    void(*read)(void*);
 } iostream_t;
 
 
 /////////////////////////////////////////////
 /////////// Function declaration //////////// 
 ///////////////////////////////////////////// 
+
+extern iostream_t cout;
+extern iostream_t cin;
+extern iostream_t cerr;
 
 extern err_t out(iostream_t stream, void* data);
 extern err_t in(iostream_t stream, void* data);

@@ -15,24 +15,20 @@
 ////////////// Type definition ////////////// 
 ///////////////////////////////////////////// 
 
-#ifndef STACK_INITIAL_ALLOCATION
-#   define STACK_INITIAL_ALLOCATION 4096U
-#endif
-
 typedef any_t stack_value_t;
-
 typedef struct {
     stack_value_t value;
     type_t type;
 } stack_element_t;
 
+#ifndef STACK_INITIAL_ALLOCATION_N
+#   define STACK_INITIAL_ALLOCATION_N 128
+#   define STACK_INITIAL_ALLOCATION (STACK_INITIAL_ALLOCATION_N * sizeof(stack_element_t))
+#endif
+
 typedef struct {
-    stack_element_t* elements;
-    struct {
-        size_t capacity_ptr;
-        size_t top_ptr;
-        len_t count;
-    } meta;
+    memory_t elements;
+    len_t count;
 } stack_t;
 
 
@@ -52,7 +48,7 @@ typedef struct {
  * @note     The created stack must be destroyed using `stack_destroy()` to free
  *           allocated memory and avoid memory leaks.
  */
-stack_t stack_create(void);
+extern stack_t stack_create(void);
 
 /**
  * @brief    Destroys a stack and frees allocated memory.
@@ -65,7 +61,7 @@ stack_t stack_create(void);
  * @note     After calling this function, the stack pointer should not be used
  *           unless it is reinitialized.
  */
-void stack_destroy(stack_t* stack);
+extern void stack_destroy(stack_t* stack);
 
 /**
  * @brief    Pushes an element onto the stack.
@@ -78,7 +74,7 @@ void stack_destroy(stack_t* stack);
  *
  * @note     Ensure that the stack is initialized before using this function.
  */
-void stack_push(stack_t* stack, stack_element_t element);
+extern err_t stack_push(stack_t* stack, stack_element_t element); // TODO: ADD DOCS
 
 /**
  * @brief    Pops an element from the stack.
@@ -92,7 +88,7 @@ void stack_push(stack_t* stack, stack_element_t element);
  *
  * @warning  Popping from an empty stack results in undefined behavior.
  */
-stack_element_t stack_pop(stack_t* stack);
+extern stack_element_t stack_pop(stack_t* stack);
 
 /**
  * @brief    Checks if the stack is empty.
@@ -103,7 +99,7 @@ stack_element_t stack_pop(stack_t* stack);
  * @param[in] stack The stack to be checked.
  * @return    `true` if the stack is empty, `false` otherwise.
  */
-bool stack_is_empty(stack_t stack);
+extern bool stack_is_empty(stack_t stack);
 
 /**
  * @brief    Strips excess memory allocated to the stack.
@@ -116,7 +112,7 @@ bool stack_is_empty(stack_t stack);
  * @note     This function is useful for minimizing memory usage after a large 
  *           number of elements have been removed from the stack.
  */
-void stack_strip(stack_t* stack);
+extern void stack_strip(stack_t* stack);
 
 /**
  * @brief    Expands the stack's memory capacity.
@@ -129,7 +125,7 @@ void stack_strip(stack_t* stack);
  *
  * @warning  Ensure there is enough system memory to allocate the new capacity.
  */
-void stack_expand(stack_t* stack);
+extern void stack_expand(stack_t* stack);
 
 /**
  * @brief    Returns the total size of the stack (capacity).
@@ -140,7 +136,7 @@ void stack_expand(stack_t* stack);
  * @param[in] stack Stack structure.
  * @return    The total size of the stack in terms of element capacity.
  */
-size_t stack_get_size(stack_t stack);
+extern size_t stack_get_size(stack_t stack);
 
 /**
  * @brief    Returns the number of elements in the stack.
@@ -150,7 +146,7 @@ size_t stack_get_size(stack_t stack);
  * @param[in] stack Stack structure.
  * @return    The number of elements in the stack.
  */
-size_t stack_get_count(stack_t stack);
+extern size_t stack_get_count(stack_t stack);
 
 
 #endif // ELLIPSE_2_ADV_STACK_H_

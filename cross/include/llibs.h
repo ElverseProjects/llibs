@@ -44,6 +44,8 @@
 #endif
 #define ELLIPSE_LANGUAGE_CSTR "C"
 
+// ISO standard C library
+#include <iso646.h>
 
 // Include every header file
 #include <c/types.h>
@@ -60,9 +62,12 @@
 #include <c/main.h>
 #include <c/math/complex.h>
 
-// Advanced
+// Data structures
 #include <c/structures/stack.h>
 #include <c/structures/vector.h>
+
+// Utils
+#include <c/utils/handlers.h>
 
 #else
 #   error "[ELLIPSE] ERROR: This header file is designed for use in C files. HELP: Use llibs.hpp instead."

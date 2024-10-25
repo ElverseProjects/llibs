@@ -10,18 +10,13 @@
 ******************************************************************************/
 
 #include <c/types.h>
-#include "str.h"
-
-/////////////////////////////////////////////
-//////////// Macros definition ////////////// 
-///////////////////////////////////////////// 
-
+#include <c/str.h>
 
 /////////////////////////////////////////////
 /////////// Function declaration //////////// 
 ///////////////////////////////////////////// 
 
 void assert(bool condition, cstr_t message);
-
+void verify(bool condition, cstr_t message);
 
 #endif // ELLIPSE_2_ASSERT_H_
