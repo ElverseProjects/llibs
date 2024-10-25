@@ -1,0 +1,6 @@
+[submodule "external/lingua"]
+	path = external/lingua
+	url = https://github.com/ElverseCorp/lingua
+[submodule "external/elix"]
+	path = external/elix
+	url = https://github.com/ElverseCorp/elix
