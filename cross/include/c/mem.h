@@ -140,7 +140,7 @@ extern void freeing(memory_t* data);
  * @param[in] src             The source memory block.
  * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
  */
-extern err_t mem_copy(memory_t* dest, memory_t src);
+extern err_t mem_copy(memory_t* dest, const memory_t src);
 
 /**
  * @brief    Sets the memory block to a specific value.
@@ -151,7 +151,7 @@ extern err_t mem_copy(memory_t* dest, memory_t src);
  * @param[in] data            The byte value to set each element to.
  * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
  */
-extern err_t mem_set(memory_t* mem, u8_t data);
+extern err_t mem_set(memory_t* mem, const u8_t data);
 
 /**
  * @brief    Moves data from one memory block to another.
