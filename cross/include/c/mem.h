@@ -17,6 +17,26 @@
 ///////////// Types definition ////////////// 
 ///////////////////////////////////////////// 
 
+
+/**
+ * @brief    Memory access levels for setting memory protection.
+ *
+ * This enumeration defines different levels of access that can be applied to 
+ * a memory block using the `mem_access` function. It includes full, 
+ * read-only, write-only, denied access modes, and special flags like 
+ * PROT_GROWSDOWN and PROT_GROWSUP for dynamic memory regions.
+ */
+typedef enum {
+    MEMORY_ACCESS_FULL          = 0b0011,   ///< Read and write access.
+    MEMORY_ACCESS_READ          = 0b0010,   ///< Read-only access.
+    MEMORY_ACCESS_WRITE         = 0b0001,   ///< Write-only access.
+    MEMORY_ACCESS_DENIED        = 0b0000,   ///< No access.
+    MEMORY_ACCESS_GROWSDOWN     = 0b0100,   ///< Memory region grows down.
+    MEMORY_ACCESS_GROWSUP       = 0b1000,   ///< Memory region grows up.
+} memory_access_t;
+
+#define MEMORY_NO_DATA (void*)(0)
+
 /**
  * @brief    Structure for managing dynamic memory.
  *
@@ -36,9 +56,10 @@
  *     or equal to the `allocated` size.
  */
 typedef struct {
-    void* data;      ///< Pointer to the allocated memory block.
-    size_t allocated; ///< Total size of allocated memory in bytes.
-    size_t used;      ///< Amount of memory currently used in bytes.
+    void* data;             ///< Pointer to the allocated memory block.
+    size_t allocated;       ///< Total size of allocated memory in bytes.
+    size_t used;            ///< Amount of memory currently used in bytes.
+    memory_access_t access; ///< Memory access level `MEMORY_ACCESS_READ`, etc..
 } memory_t;
 
 
@@ -68,7 +89,7 @@ extern memory_t allocate(size_t num, size_t sizeof_element);
  * elements of size `sizeof_element`. The contents of the memory will be preserved, 
  * but if the memory is expanded, new space will be uninitialized.
  *
- * @param[in] data            The memory block to reallocate.
+ * @param[in] memory          The memory block to reallocate.
  * @param[in] num             The number of elements to allocate.
  * @param[in] sizeof_element   The size of each element in bytes.
  * @return    A memory_t structure with the reallocated memory.
@@ -76,7 +97,7 @@ extern memory_t allocate(size_t num, size_t sizeof_element);
  * @note     The pointer `data->data` may change after this operation. Always 
  *           check the returned memory structure.
  */
-extern memory_t reallocate(memory_t* data, size_t num, size_t sizeof_element);
+extern memory_t reallocate(memory_t* memory, len_t num, size_t sizeof_element);
 
 /**
  * @brief    Forces reallocation, overwriting data if necessary.
@@ -85,14 +106,14 @@ extern memory_t reallocate(memory_t* data, size_t num, size_t sizeof_element);
  * overwriting any data if the memory is reduced or shifted. This may result 
  * in loss of data if the memory is resized to a smaller size.
  *
- * @param[in] data            The memory block to reallocate.
+ * @param[in] memory            The memory block to reallocate.
  * @param[in] num             The number of elements to allocate.
  * @param[in] sizeof_element   The size of each element in bytes.
  * @return    A memory_t structure with the reallocated memory.
  *
  * @warning  This function may overwrite data. Use with caution.
  */
-extern memory_t reallocate_force(memory_t* data, size_t num, size_t sizeof_element);
+extern memory_t reallocate_force(memory_t* memory, len_t num, size_t sizeof_element);
 
 /**
  * @brief    Frees the allocated memory.
@@ -103,7 +124,7 @@ extern memory_t reallocate_force(memory_t* data, size_t num, size_t sizeof_eleme
  * @param[in] data            The memory block to free.
  * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
  */
-extern err_t freeing(memory_t data);
+extern void freeing(memory_t* data);
 
 /////////////////////////////////////////////
 //////// Memory managment functions ///////// 
@@ -166,7 +187,7 @@ extern ssize_t mem_compare(memory_t mem1, memory_t mem2);
  * @param[in] mem             The memory block to optimize.
  * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
  */
-extern err_t mem_strip(memory_t* mem);
+extern err_t mem_strip(memory_t* memory);
 
 /////////////////////////////////////////////
 ////////// Global memory functions ////////// 
@@ -255,20 +276,6 @@ extern void free_generic(void* data);
 /////////////////////////////////////////////
 ///////////// Memory protection ///////////// 
 ///////////////////////////////////////////// 
-
-/**
- * @brief    Memory access levels for setting memory protection.
- *
- * This enumeration defines different levels of access that can be applied to 
- * a memory block using the `mem_access` function. It includes full, 
- * read-only, write-only, and denied access modes.
- */
-typedef enum {
-    MEMORY_ACCESS_FULL          = 0b11,
-    MEMORY_ACCESS_READ          = 0b10,
-    MEMORY_ACCESS_WRITE         = 0b01,
-    MEMORY_ACCESS_DENIED        = 0b00,
-} memory_access_t;
 
 /**
  * @brief    Sets memory access protection level for a memory block.
