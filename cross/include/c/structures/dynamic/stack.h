@@ -1,15 +1,16 @@
-#ifndef ELLIPSE_2_ADV_STACK_H_
-#define ELLIPSE_2_ADV_STACK_H_
+#ifndef ELLIPSE_2_STRUCTURES_DYMANIC_STACK_H_
+#define ELLIPSE_2_STRUCTURES_DYMANIC_STACK_H_
 
 /**************************************************************************//**
  * @file     stack.h
- * @brief    Ellipse advanced / stack for C.
+ * @brief    Ellipse advanced / dynamic typed stack for C.
  * @version  V0.3.0
  * @date     22. Oct 2024
  * @author   Matvey Rybalkin
 ******************************************************************************/
 
 #include <c/types.h>
+#include <c/mem.h>
 
 /////////////////////////////////////////////
 ////////////// Type definition ////////////// 
@@ -35,6 +36,8 @@ typedef struct {
 /////////////////////////////////////////////
 /////////// Function declaration //////////// 
 ///////////////////////////////////////////// 
+
+// TODO: Should we use any_t + type_t instead of stack_element_t???
 
 /**
  * @brief    Creates a new stack with an initial allocation.
@@ -122,10 +125,9 @@ extern void stack_strip(stack_t* stack);
  * can also be called explicitly to pre-allocate space for future elements.
  *
  * @param[in] stack Pointer to the stack that needs to be expanded.
- *
  * @warning  Ensure there is enough system memory to allocate the new capacity.
  */
-extern void stack_expand(stack_t* stack);
+extern void stack_expand(stack_t* stack, size_t new_size);
 
 /**
  * @brief    Returns the total size of the stack (capacity).
@@ -149,4 +151,4 @@ extern size_t stack_get_size(stack_t stack);
 extern size_t stack_get_count(stack_t stack);
 
 
-#endif // ELLIPSE_2_ADV_STACK_H_
+#endif // ELLIPSE_2_STRUCTURES_DYMANIC_STACK_H_

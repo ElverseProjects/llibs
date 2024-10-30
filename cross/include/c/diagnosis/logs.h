@@ -11,6 +11,7 @@
 
 #include <c/types.h>
 #include <c/str.h>
+#include <c/io.h>
 
 /////////////////////////////////////////////
 ///////////// Type definitions ////////////// 
@@ -27,8 +28,8 @@ typedef enum {
 typedef struct {
     len_t line;
     len_t indent;
-    cstr_t filename;
-    cstr_t funcname;
+    cstr_t file_name;
+    cstr_t func_name;
 } file_point_t;
 
 /////////////////////////////////////////////
@@ -36,14 +37,17 @@ typedef struct {
 ///////////////////////////////////////////// 
 
 
+
 /////////////////////////////////////////////
 /////////// Function declaration //////////// 
 ///////////////////////////////////////////// 
 
 /**
+ * @note Only for logs.
+ * 
  * `filename:line:indent:` in function `funcname`
  */
-void file_point_print(file_point_t point);
+void file_point_print(iostream_t stream, file_point_t point);
 void log_info(log_level_t level, cstr_t message);
 
 #endif // ELLIPSE_2_LOGS_H_

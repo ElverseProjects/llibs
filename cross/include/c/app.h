@@ -19,6 +19,7 @@
 typedef i32_t main_t;
 typedef struct {
     const i32_t num;
+    cstr_t path;
     cstr_t* args;
 } app_args_t;
 

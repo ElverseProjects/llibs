@@ -122,9 +122,8 @@ extern memory_t reallocate_force(memory_t* memory, len_t num, size_t sizeof_elem
  * memory metadata to zero.
  *
  * @param[in] data            The memory block to free.
- * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
  */
-extern void freeing(memory_t* data);
+extern status_t freeing(memory_t* data);
 
 /////////////////////////////////////////////
 //////// Memory managment functions ///////// 
@@ -138,9 +137,9 @@ extern void freeing(memory_t* data);
  *
  * @param[in] dest            The destination memory block.
  * @param[in] src             The source memory block.
- * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
+ * @return    An error / warning code of type `status_t`. 
  */
-extern err_t mem_copy(memory_t* dest, const memory_t src);
+extern status_t mem_copy(memory_t* dest, const memory_t src);
 
 /**
  * @brief    Sets the memory block to a specific value.
@@ -149,9 +148,9 @@ extern err_t mem_copy(memory_t* dest, const memory_t src);
  *
  * @param[in] mem            The memory block to be set.
  * @param[in] data            The byte value to set each element to.
- * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
+ * @return    An error / warning code of type `status_t`. 
  */
-extern err_t mem_set(memory_t* mem, const u8_t data);
+extern status_t mem_set(memory_t* mem, const u8_t data);
 
 /**
  * @brief    Moves data from one memory block to another.
@@ -161,9 +160,9 @@ extern err_t mem_set(memory_t* mem, const u8_t data);
  *
  * @param[in] mem1            The destination memory block.
  * @param[in] mem2            The source memory block.
- * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
+ * @return    An error / warning code of type `status_t`. 
  */
-extern err_t mem_move(memory_t* mem1, memory_t* mem2);
+extern status_t mem_move(memory_t* mem1, memory_t* mem2);
 
 /**
  * @brief    Compares two memory blocks.
@@ -185,9 +184,9 @@ extern ssize_t mem_compare(memory_t mem1, memory_t mem2);
  * it to fit the currently used size. It can be used to minimize memory overhead.
  *
  * @param[in] mem             The memory block to optimize.
- * @return    An error code of type `err_t`. Returns `OK` if on success, non-zero on error.
+ * @return    An error / warning code of type `status_t`. 
  */
-extern err_t mem_strip(memory_t* memory);
+extern status_t mem_strip(memory_t* memory);
 
 /////////////////////////////////////////////
 ////////// Global memory functions ////////// 
@@ -226,14 +225,14 @@ extern size_t mem_global_used_resources_size(void);
  * This function frees all globally allocated memory used by the program. 
  * It should be called when the program is finished using memory to avoid leaks.
  *
- * @return    An error code of type `err_t`. Returns `OK` on success, non-zero on error.
+ * @return    An error / warning code of type `status_t`. Returns `OK` on success, non-zero on error / warning.
  */
-extern err_t mem_global_all_resources_free(void);
+extern status_t mem_global_all_resources_free(void);
 
 /**
  * UNFINISHED!!
  */
-extern err_t mem_global_dump(void);  // TODO: file io
+extern status_t mem_global_dump(void);  // TODO: file io
 
 /////////////////////////////////////////////
 ///////// Generic memory allocation ///////// 
@@ -287,7 +286,7 @@ extern void free_generic(void* data);
  * @param[in] memory   The memory block whose access level is being changed.
  * @param[in] level    The access level to be set, defined by `memory_access_t`.
  *
- * @return    An error code of type `err_t`. Returns 0 on success, non-zero on failure.
+ * @return    An error / warning code of type `status_t`. Returns 0 on success, non-zero on failure.
  *
  * @note      This function is platform-dependent and relies on system-specific 
  *            memory protection mechanisms such as `mprotect` for POSIX systems 
@@ -296,6 +295,6 @@ extern void free_generic(void* data);
  * @warning   Attempting to access memory after setting `MEMORY_ACCESS_DENIED` 
  *            will result in a segmentation fault or access violation.
  */
-extern err_t mem_access(memory_t memory, memory_access_t level);
+extern status_t mem_access(memory_t memory, memory_access_t level);
 
 #endif // ELLIPSE_2_MEM_H_

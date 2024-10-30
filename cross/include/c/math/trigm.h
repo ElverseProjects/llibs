@@ -1,25 +1,31 @@
-#ifndef ELLIPSE_2_LOCALE_H_
-#define ELLIPSE_2_LOCALE_H_
+#ifndef ELLIPSE_2_MATH_H_
+#define ELLIPSE_2_MATH_H_
 
 /**************************************************************************//**
- * @file     locale.h
- * @brief    Ellipse locales for C/C++.
+ * @file     math.h
+ * @brief    Ellipse mathematic for C.
  * @version  V0.3.0
- * @date     30. Sep 2024
+ * @date     22. Oct 2024
  * @author   Matvey Rybalkin
 ******************************************************************************/
 
 #include <c/types.h>
-#include <c/str.h>
-
-extern str_t getenv(cstr_t name);
+#include <c/math.h>
 
 /////////////////////////////////////////////
-///////////// Macros definition ///////////// 
+///////////// Types definition //////////////
 /////////////////////////////////////////////
+
+#include <float.h>
+#include <math.h>
+
 
 /////////////////////////////////////////////
 /////////// Function declaration //////////// 
-///////////////////////////////////////////// 
+/////////////////////////////////////////////
 
-#endif // ELLIPSE_2_LOCALE_H_
+extern fmax_t sin(fmax_t radian);
+extern fmax_t sind(fmax_t degree);
+
+
+#endif // ELLIPSE_2_MATH_H_

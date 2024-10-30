@@ -41,7 +41,6 @@ void fast_copy(void *dst, const void *src, size_t n) {
 err_t mem_copy(memory_t* dest, const memory_t src) {
 
 
-
     if (dest->allocated < src.used)  {
         
     }

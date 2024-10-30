@@ -27,6 +27,11 @@
 /////////////////////////////////////////////
 
 /**
+ * @typedef ptr_t
+ * @brief Pointer to any type.
+ */
+typedef void*               ptr_t;
+/**
  * @typedef i8_t
  * @brief Signed 8-bit integer.
  */
@@ -347,6 +352,8 @@ typedef enum {
     TYPE_UNKNOWN,   ///< Undefined data type that cannot be uniquely defined, such as `void*`
 } type_t;
 
+extern size_t type_size(type_t type);
+
 /**
  * @brief Enumeration of generic value types.
  * 
@@ -548,10 +555,13 @@ typedef enum {
     WARN_GENERAL = 1,                 ///< General warning.
 
     // Memory Warnings
-    WARN_MEM_GENERAL = 100,           ///< General memory warning.
-    WARN_MEM_USAGE_HIGH = 101,        ///< High memory usage.
-    WARN_MEM_FRAGMENTATION = 102,     ///< Memory fragmentation detected.
-    WARN_MEM_NEAR_OUT = 103,          ///< Memory nearly exhausted.
+    WARN_MEM_GENERAL = 100,             ///< General memory warning.
+    WARN_MEM_USAGE_HIGH = 101,          ///< High memory usage.
+    WARN_MEM_FRAGMENTATION = 102,       ///< Memory fragmentation detected.
+    WARN_MEM_NEAR_OUT = 103,            ///< Memory nearly exhausted.
+    WARN_MEM_IMPLICIT_ALLOCATION = 104, ///< Implicit memory allocation.
+    WARN_MEM_IMPLICIT_FREED = 105,      ///< Implicit memory freeing.
+    WARN_MEM_USELESS_OPERATION = 106,   ///< Memory useless operation.
 
     // I/O Warnings
     WARN_IO_GENERAL = 200,              ///< General I/O warning.
@@ -712,17 +722,17 @@ typedef u32_t status_t;
 
 /**
  * @brief Extracts the error code.
- * @param value Combined error and warning value
+ * @param[in] status Combined error and warning value
  * @return The error code
  */
-#define GET_ERROR(value) (((value) & ERR_MASK) >> 16)
+extern inline err_t extract_error(status_t status);
 
 /**
  * @brief Extracts the warning code.
- * @param value Combined error and warning value
+ * @param[in] status Combined error and warning value
  * @return The warning code
  */
-#define GET_WARNING(value) ((value) & WARN_MASK)
+extern inline warn_t extract_warning(status_t status);
 
 
 /////////////////////////////////////////////

@@ -43,11 +43,18 @@ memory_t allocate(len_t num, size_t sizeof_element) {
     return data;
 }
 
-void freeing(memory_t* memory) {
+status_t freeing(memory_t* memory) {
+    
+    if (memory->data == NULL) {
+        // --------------- TODO: Error handler
+        abort(EXIT_FAILURE);
+    }
+
     if (munmap(memory->data, memory->allocated) == -1) {
         // --------------- TODO: Error handler
         abort(EXIT_FAILURE);
     }
+
     memory->access    = MEMORY_ACCESS_DENIED;
     memory->data      = MEMORY_NO_DATA;
     memory->allocated = 0;
@@ -55,12 +62,14 @@ void freeing(memory_t* memory) {
 }
 
 memory_t reallocate(memory_t* memory, len_t num, size_t sizeof_element) {
+    
     if (memory == NULL) {
         // --------------- TODO: Error handler
     }
+
     size_t allocated = num * sizeof_element;
     memory_t data = (*memory);
-    
+
     if (allocated > memory->allocated) {
         data.allocated = allocated;
         data.data = mremap(
@@ -69,6 +78,8 @@ memory_t reallocate(memory_t* memory, len_t num, size_t sizeof_element) {
             allocated,
             MREMAP_MAYMOVE
         );
+    } else {
+        // --------------- TODO: Throw warning. (USELESS_OPERATION)
     }
 
     if (data.data == MAP_FAILED) {
@@ -82,6 +93,7 @@ memory_t reallocate(memory_t* memory, len_t num, size_t sizeof_element) {
 
 
 memory_t reallocate_force(memory_t* memory, len_t num, size_t sizeof_element) {
+    
     if (memory == NULL) {
         // --------------- TODO: Error handler
     }
@@ -110,7 +122,7 @@ memory_t reallocate_force(memory_t* memory, len_t num, size_t sizeof_element) {
 }
 
 
-err_t mem_access(memory_t* memory, memory_access_t level) {
+status_t mem_access(memory_t* memory, memory_access_t level) {
     if (memory == NULL) {
         // --------------- TODO: Error handler
     }
@@ -120,7 +132,7 @@ err_t mem_access(memory_t* memory, memory_access_t level) {
     return ERR_OK;
 }
 
-err_t mem_strip(memory_t* memory) {
+status_t mem_strip(memory_t* memory) {
     if (memory == NULL) {
         // --------------- TODO: Error handler
     }
